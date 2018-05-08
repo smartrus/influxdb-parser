@@ -10,7 +10,7 @@ import org.influxdb.dto.QueryResult;
 import org.influxdb.dto.QueryResult.Series;
 import org.influxdb.impl.InfluxDBImpl;
 
-public class InfluxParser{
+public class InfluxDBParser{
 
     public static void main(String[] args) {
 	// write your code here
