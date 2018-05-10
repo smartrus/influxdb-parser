@@ -15,10 +15,10 @@ public class AgregateReport {
     private String aggregate_report_rate;
     private String aggregate_report_stddev;
     private String average;
-    private String buildID;
+    private Integer buildID;
     private String envType;
     private String projectName;
     private String requestName;
     private String testType;
-    private String version_id;
+    private Integer version_id;
 }
