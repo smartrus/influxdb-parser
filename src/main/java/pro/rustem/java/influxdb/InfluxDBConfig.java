@@ -1,5 +1,8 @@
 package pro.rustem.java.influxdb;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InfluxDBConfig {
     private String url;
     private String user;

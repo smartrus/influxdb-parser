@@ -1,4 +1,5 @@
 package pro.rustem.java.influxdb;
+import org.influxdb.InfluxDB;
 import org.junit.jupiter.api.*;
 
 class InfluxDBConfigTest {
@@ -38,7 +39,7 @@ class InfluxDBManagerTest {
     @Test
     void testConnection() {
         InfluxDBManager influxDBManager = new InfluxDBManager();
-        Boolean result = influxDBManager.connect();
-        Assertions.assertTrue(result);
+        InfluxDB result = influxDBManager.connect();
+        Assertions.assertNotNull(result);
     }
 }
