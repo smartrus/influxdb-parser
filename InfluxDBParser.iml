@@ -12,6 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="org.influxdb:influxdb-java:2.10" level="project" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.8.4" level="project" />
     <orderEntry type="library" name="Maven: org.influxdb:influxdb-java:2.7" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.3.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-moshi:2.3.0" level="project" />
@@ -23,5 +24,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.4" level="project" />
   </component>
 </module>

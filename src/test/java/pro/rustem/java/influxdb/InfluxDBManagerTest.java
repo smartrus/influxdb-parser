@@ -1,15 +1,6 @@
 package pro.rustem.java.influxdb;
 import org.junit.jupiter.api.*;
 
-class InfluxDBManagerTest {
-    @Test
-    void testConnection() {
-        InfluxDBManager influxDBManager = new InfluxDBManager();
-        Boolean result = influxDBManager.connect();
-        Assertions.assertTrue(result);
-    }
-}
-
 class InfluxDBConfigTest {
     @Test
     void getUrlTest() {
@@ -30,5 +21,24 @@ class InfluxDBConfigTest {
         InfluxDBConfig dbConfig = new InfluxDBConfig("http://test.com", "user", "password");
         String url = dbConfig.getPassword();
         Assertions.assertTrue(url.equals("password"));
+    }
+}
+
+class InfluxDBManagerTest {
+
+    @Test
+    void configInitTest() {
+        InfluxDBManager influxDBManager = new InfluxDBManager();
+        InfluxDBConfig result = influxDBManager.configInit();
+        Assertions.assertTrue(result.getUrl().equals("http://localhost:8086"));
+        Assertions.assertTrue(result.getUser().equals("root"));
+        Assertions.assertTrue(result.getPassword().equals("root"));
+    }
+
+    @Test
+    void testConnection() {
+        InfluxDBManager influxDBManager = new InfluxDBManager();
+        Boolean result = influxDBManager.connect();
+        Assertions.assertTrue(result);
     }
 }
