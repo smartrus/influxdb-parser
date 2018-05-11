@@ -1,4 +1,4 @@
-package pro.rustem.java;
+package pro.rustem.java.influxdb;
 import org.influxdb.*;
 import org.influxdb.dto.Query;
 
