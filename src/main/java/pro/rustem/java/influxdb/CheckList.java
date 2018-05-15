@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Check {
-    private String fieldKey;
     private String check;
     private Double multiplier;
-
-    public String getFieldKey() {
-        return fieldKey;
-    }
 
     public String getCheck() {
         return check;
@@ -18,10 +13,6 @@ class Check {
 
     public Double getMultiplier() {
         return multiplier;
-    }
-
-    public void setFieldKey(String fieldKey) {
-        this.fieldKey = fieldKey;
     }
 
     public void setCheck(String check) {

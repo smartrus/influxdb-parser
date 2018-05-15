@@ -8,18 +8,21 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class InfluxDBManager {
+    private static InfluxDBConfig influxDBConfig;
+    private static CheckList checksWrapper;
+
     public InfluxDBManager() {
+        InfluxDBManager.influxDBConfig = this.configInit();
+        InfluxDBManager.checksWrapper = this.checkInit();
     }
 
-    public InfluxDB connect() {
-        InfluxDBConfig influxDBConfig = this.configInit();
+    public static InfluxDB connect() {
         InfluxDB influxDB = InfluxDBFactory.connect(influxDBConfig.getUrl(), influxDBConfig.getUser(),
                 influxDBConfig.getPassword());
         return influxDB;
     }
 
     protected InfluxDBConfig configInit() {
-        InfluxDBConfig influxDBConfig = new InfluxDBConfig("http://localhost:8086", "user", "password");
 
         Gson gson = new Gson();
         BufferedReader br = null;
@@ -61,5 +64,13 @@ public class InfluxDBManager {
         }
 
         return checks;
+    }
+
+    public static InfluxDBConfig getInfluxDBConfig() {
+        return influxDBConfig;
+    }
+
+    public static CheckList getChecksWrapper() {
+        return checksWrapper;
     }
 }

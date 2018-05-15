@@ -11,6 +11,7 @@ class InfluxDBManagerTest {
         Assertions.assertTrue(result.getUrl().equals("http://localhost:8086"));
         Assertions.assertTrue(result.getUser().equals("root"));
         Assertions.assertTrue(result.getPassword().equals("root"));
+        Assertions.assertTrue(result.getDbname().equals("jmeter"));
     }
 
     @Test

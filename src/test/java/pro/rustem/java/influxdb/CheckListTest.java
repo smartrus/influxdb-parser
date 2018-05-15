@@ -11,6 +11,6 @@ class CheckListTest {
     void getChecks() {
         InfluxDBManager influxDBManager = new InfluxDBManager();
         CheckList result = influxDBManager.checkInit();
-        Assertions.assertTrue(result.getChecks().get(0).getFieldKey().equals("networkRate"));
+        Assertions.assertTrue(result.getChecks().get(0).getCheck().equals("KB/s"));
     }
 }

@@ -7,11 +7,13 @@ public class InfluxDBConfig {
     private String url;
     private String user;
     private String password;
+    private String dbname;
 
-    public InfluxDBConfig(String url, String user, String password) {
+    public InfluxDBConfig(String url, String user, String password, String dbname) {
         this.url = url;
         this.user = user;
         this.password = password;
+        this.dbname = dbname;
     }
 
     public String getUrl() {
@@ -26,4 +28,5 @@ public class InfluxDBConfig {
         return password;
     }
 
+    public String getDbname() { return dbname; }
 }
