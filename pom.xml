@@ -26,6 +26,13 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>/</classpathPrefix>
+                            <mainClass>pro.rustem.java.influxdb.InfluxDBParser</mainClass>
+                        </manifest>
+                        </archive>
                 </configuration>
             </plugin>
         </plugins>
