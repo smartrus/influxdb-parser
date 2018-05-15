@@ -15,7 +15,11 @@ public class InfluxDBParser{
         Boolean result = influxDBParser.checkAgregateReportFormat(aggregateReportList);
 
         if (result) {
-
+            CmdExecutor cmdExecutor = new CmdExecutor();
+            String command = "influx_inspect export -database jmeter -retention autogen -datadir /var/lib/influxdb/data/ -waldir /var/lib/influxdb/wal/ -out jmeter";
+            cmdExecutor.executeCommand(command);
+        } else {
+            System.out.println("No wrong format detected.");
         }
     }
 

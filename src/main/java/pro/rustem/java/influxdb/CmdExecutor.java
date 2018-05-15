@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class CmdExecutor {
-    private String executeCommand(String command) {
+    protected Integer executeCommand(String command) {
+        Integer exitCode = 0;
 
         StringBuffer output = new StringBuffer();
 
         Process p;
         try {
             p = Runtime.getRuntime().exec(command);
-            p.waitFor();
+            exitCode = p.waitFor();
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(p.getInputStream()));
 
@@ -24,7 +25,7 @@ public class CmdExecutor {
             e.printStackTrace();
         }
 
-        return output.toString();
+        return exitCode;
 
     }
 }
