@@ -9,13 +9,17 @@ import java.util.List;
 public class InfluxDBParser{
 
     public static void main(String[] args) {
+        InfluxDBParser influxDBParser = new InfluxDBParser();
         InfluxDBManager influxDBManager = new InfluxDBManager();
-        List<AggregateReport> aggregateReportList = InfluxDBParser.fetchAggregateReportList();
-        Boolean result = InfluxDBParser.checkAgregateReportFormat(aggregateReportList);
-        System.out.println(result);
+        List<AggregateReport> aggregateReportList = influxDBParser.fetchAggregateReportList();
+        Boolean result = influxDBParser.checkAgregateReportFormat(aggregateReportList);
+
+        if (result) {
+
+        }
     }
 
-    private static List<AggregateReport> fetchAggregateReportList() {
+    private List<AggregateReport> fetchAggregateReportList() {
         InfluxDB influxDB = InfluxDBManager.connect();
         String dbname = InfluxDBManager.getInfluxDBConfig().getDbname();
         influxDB.setDatabase(dbname);
@@ -30,7 +34,7 @@ public class InfluxDBParser{
         return aggregateReportList;
     }
 
-    private static Boolean checkAgregateReportFormat(List<AggregateReport> aggregateReportList) {
+    private Boolean checkAgregateReportFormat(List<AggregateReport> aggregateReportList) {
         Boolean result = false;
         List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
 
