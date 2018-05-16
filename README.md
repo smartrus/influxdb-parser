@@ -1,5 +1,11 @@
 # influxdb-parser
 
+### Build jar file
+
+```
+mvn clean install
+```
+
 ### Initial setup
 
 Create the following configuration files in the same directory as your InfluxDBParser.jar file's location.
