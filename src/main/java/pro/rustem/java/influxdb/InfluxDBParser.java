@@ -12,7 +12,7 @@ public class InfluxDBParser{
         InfluxDBParser influxDBParser = new InfluxDBParser();
         InfluxDBManager influxDBManager = new InfluxDBManager();
         List<AggregateReport> aggregateReportList = influxDBParser.fetchAggregateReportList();
-        Boolean result = influxDBParser.checkAgregateReportFormat(aggregateReportList);
+        Boolean result = influxDBParser.checkAggregateReportFormat(aggregateReportList);
 
         if (result) {
             CmdExecutor cmdExecutor = new CmdExecutor();
@@ -38,7 +38,7 @@ public class InfluxDBParser{
         return aggregateReportList;
     }
 
-    private Boolean checkAgregateReportFormat(List<AggregateReport> aggregateReportList) {
+    private Boolean checkAggregateReportFormat(List<AggregateReport> aggregateReportList) {
         Boolean result = false;
         List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
 
