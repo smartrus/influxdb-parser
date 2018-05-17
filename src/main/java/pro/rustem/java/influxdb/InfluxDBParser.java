@@ -21,6 +21,7 @@ public class InfluxDBParser{
         Boolean result = influxDBParser.checkAggregateReportFormat(aggregateReportList);
 
         if (result) {
+            System.out.println("Wrong format detected.");
             CmdExecutor cmdExecutor = new CmdExecutor();
             // TODO need to build the command string by a method
             String command = "influx_inspect export -database jmeter -retention autogen -datadir /var/lib/influxdb/data/ -waldir /var/lib/influxdb/wal/ -out jmeter";
@@ -67,12 +68,19 @@ public class InfluxDBParser{
     }
 
     private void fixDumpFormat(String dumpPath) {
+        List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
+
         try {
             System.out.println("Influxdb fix started...");
             Path path = Paths.get(dumpPath);
             Stream<String> lines = Files.lines(path);
-            List<String> replaced = lines.map(line -> line.replaceAll("N/A", "0")).collect(Collectors.toList());
-            Files.write(path, replaced);
+
+            for (Check check:
+                 checks) {
+                List<String> replaced = lines.map(line -> line.replaceAll(check.getCheck(), "0")).collect(Collectors.toList());
+                Files.write(path, replaced);
+            }
+
             lines.close();
             System.out.println("Influxdb fix done.");
         } catch (IOException e) {
