@@ -4,7 +4,13 @@ import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InfluxDBParser{
 
@@ -16,8 +22,10 @@ public class InfluxDBParser{
 
         if (result) {
             CmdExecutor cmdExecutor = new CmdExecutor();
+            // TODO need to build the command string by a method
             String command = "influx_inspect export -database jmeter -retention autogen -datadir /var/lib/influxdb/data/ -waldir /var/lib/influxdb/wal/ -out jmeter";
             cmdExecutor.executeCommand(command);
+            influxDBParser.fixDumpFormat("./jmeter");
         } else {
             System.out.println("No wrong format detected.");
         }
@@ -41,6 +49,7 @@ public class InfluxDBParser{
     private Boolean checkAggregateReportFormat(List<AggregateReport> aggregateReportList) {
         Boolean result = false;
         List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
+        System.out.println("CheckAggregateReportFormat started.");
 
         for (AggregateReport aggregateReport:
         aggregateReportList) {
@@ -53,7 +62,22 @@ public class InfluxDBParser{
                 }
             }
         }
+        System.out.println("CheckAggregateReportFormat done.");
         return result;
+    }
+
+    private void fixDumpFormat(String dumpPath) {
+        try {
+            System.out.println("Influxdb fix started...");
+            Path path = Paths.get(dumpPath);
+            Stream<String> lines = Files.lines(path);
+            List<String> replaced = lines.map(line -> line.replaceAll("N/A", "0")).collect(Collectors.toList());
+            Files.write(path, replaced);
+            lines.close();
+            System.out.println("Influxdb fix done.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

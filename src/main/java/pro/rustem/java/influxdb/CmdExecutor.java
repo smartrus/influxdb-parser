@@ -11,6 +11,7 @@ public class CmdExecutor {
 
         Process p;
         try {
+            System.out.println("Influxdb dump started...");
             p = Runtime.getRuntime().exec(command);
             exitCode = p.waitFor();
             BufferedReader reader =
@@ -25,6 +26,7 @@ public class CmdExecutor {
             e.printStackTrace();
         }
 
+        System.out.println("Influxdb dump done.");
         return exitCode;
 
     }
