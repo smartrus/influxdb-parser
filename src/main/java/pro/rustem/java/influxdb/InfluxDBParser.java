@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.regex.*;
+
+/**
+ * Main class of the project with main method.
+ */
 public class InfluxDBParser{
 
     public static void main(String[] args) {
@@ -32,6 +37,10 @@ public class InfluxDBParser{
         }
     }
 
+    /**
+     * Fetches records from the influxdb
+     * @return returns a pojo class AggregateReportList instance
+     */
     private List<AggregateReport> fetchAggregateReportList() {
         InfluxDB influxDB = InfluxDBManager.connect();
         String dbname = InfluxDBManager.getInfluxDBConfig().getDbname();
@@ -47,6 +56,11 @@ public class InfluxDBParser{
         return aggregateReportList;
     }
 
+    /**
+     * Checks the aggregateReport if it needs to be re-formatted
+     * @param aggregateReportList
+     * @return boolean value which is true if it finds any strings from checks list
+     */
     private Boolean checkAggregateReportFormat(List<AggregateReport> aggregateReportList) {
         Boolean result = false;
         List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
@@ -67,19 +81,21 @@ public class InfluxDBParser{
         return result;
     }
 
+    /**
+     * Fixes the dumped data by substituting strings with calculated corresponding values
+     * @param dumpPath
+     */
     private void fixDumpFormat(String dumpPath) {
-        List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
 
         try {
             System.out.println("Influxdb fix started...");
             Path path = Paths.get(dumpPath);
             Stream<String> lines = Files.lines(path);
 
-            for (Check check:
-                 checks) {
-                List<String> replaced = lines.map(line -> line.replaceAll(check.getCheck(), "0")).collect(Collectors.toList());
-                Files.write(path, replaced);
-            }
+            List<String> replaced = lines
+                    .map(line-> line.replaceAll("KB/s", "0"))
+                    .collect(Collectors.toList());
+            Files.write(path, replaced);
 
             lines.close();
             System.out.println("Influxdb fix done.");

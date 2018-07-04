@@ -3,6 +3,9 @@ package pro.rustem.java.influxdb;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to store checks from a configuration file
+ */
 class Check {
     private String check;
     private Double multiplier;

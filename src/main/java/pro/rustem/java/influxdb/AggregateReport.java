@@ -4,6 +4,9 @@ import org.influxdb.annotation.Measurement;
 
 import java.time.Instant;
 
+/**
+ * A class to store a report data from infulxdb
+ */
 @Measurement(name = "aggregateReports")
 public class AggregateReport {
     @Column(name = "time")

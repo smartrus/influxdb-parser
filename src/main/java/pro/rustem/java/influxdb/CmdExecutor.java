@@ -3,6 +3,9 @@ package pro.rustem.java.influxdb;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+/**
+ * A wrapper class for shell commands execution
+ */
 public class CmdExecutor {
     protected Integer executeCommand(String command) {
         Integer exitCode = 0;

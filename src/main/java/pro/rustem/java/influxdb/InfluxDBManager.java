@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * A class for managing influxdb essential operations and initializing configuration items
+ */
 public class InfluxDBManager {
     private static InfluxDBConfig influxDBConfig;
     private static CheckList checksWrapper;

@@ -3,6 +3,9 @@ package pro.rustem.java.influxdb;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to store influxdb configuration
+ */
 public class InfluxDBConfig {
     private String url;
     private String user;
