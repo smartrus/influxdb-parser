@@ -91,20 +91,23 @@ public class InfluxDBParser{
             System.out.println("Influxdb fix started...");
             Path path = Paths.get(dumpPath);
             Stream<String> lines = Files.lines(path);
+            List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
 
             List<String> replaced = lines
                     .map(line-> {
                         String fixedLine = line;
-                        String regexe = "([0-9]*[.])?[0-9]+/sec";
-                        String reportValue = null;
-                        String fixedReportValue = null;
+                        for (Check check:
+                                checks) {
 
-                        Pattern pattern = Pattern.compile(regexe);
-                        Matcher matcher = pattern.matcher(line);
-                        while (matcher.find()) {
-                            reportValue = matcher.group(0);
-                            fixedReportValue = String.valueOf(Float.valueOf(reportValue.substring(0, reportValue.length()-4))*100);
-                            fixedLine = line.replaceAll(reportValue, fixedReportValue + "/sec*100");
+                            String regexe = "([0-9]*[.])?[0-9]+" + check.getCheck();
+
+                            Pattern pattern = Pattern.compile(regexe);
+                            Matcher matcher = pattern.matcher(line);
+                            while (matcher.find()) {
+                                String reportValue = matcher.group(0);
+                                String fixedReportValue = String.valueOf(Math.round(Float.valueOf(reportValue.substring(0, reportValue.length() - check.getCheck().length())) * check.getMultiplier()*100.0)/100.0);
+                                fixedLine = line.replaceAll(reportValue, fixedReportValue);
+                            }
                         }
                         return fixedLine;
                     }).collect(Collectors.toList());
