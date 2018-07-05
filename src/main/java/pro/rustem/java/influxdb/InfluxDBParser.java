@@ -93,8 +93,21 @@ public class InfluxDBParser{
             Stream<String> lines = Files.lines(path);
 
             List<String> replaced = lines
-                    .map(line-> line.replaceAll("KB/s", "0"))
-                    .collect(Collectors.toList());
+                    .map(line-> {
+                        String fixedLine = line;
+                        String regexe = "([0-9]*[.])?[0-9]+/sec";
+                        String reportValue = null;
+                        String fixedReportValue = null;
+
+                        Pattern pattern = Pattern.compile(regexe);
+                        Matcher matcher = pattern.matcher(line);
+                        while (matcher.find()) {
+                            reportValue = matcher.group(0);
+                            fixedReportValue = String.valueOf(Float.valueOf(reportValue.substring(0, reportValue.length()-4))*100);
+                            fixedLine = line.replaceAll(reportValue, fixedReportValue + "/sec*100");
+                        }
+                        return fixedLine;
+                    }).collect(Collectors.toList());
             Files.write(path, replaced);
 
             lines.close();
