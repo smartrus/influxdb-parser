@@ -42,8 +42,11 @@ public class InfluxDBParser{
         if (result) {
             System.out.println("Wrong format detected.");
             CmdExecutor cmdExecutor = new CmdExecutor();
-            // TODO need to build the command string by a method
-            String command = "influx_inspect export -database jmeter -retention autogen -datadir /var/lib/influxdb/data/ -waldir /var/lib/influxdb/wal/ -out jmeter";
+            String command = "influx_inspect export -database " + InfluxDBManager.getInfluxDBConfig().getDbname()
+                    + " -retention " + InfluxDBManager.getInfluxDBConfig().getRetention()
+                    + " -datadir " + InfluxDBManager.getInfluxDBConfig().getDatadir()
+                    + "-waldir " + InfluxDBManager.getInfluxDBConfig().getWaldir()
+                    + " -out " + InfluxDBManager.getInfluxDBConfig().getDbname();
             cmdExecutor.executeCommand(command);
             influxDBParser.fixDumpFormat("./jmeter");
         } else {
