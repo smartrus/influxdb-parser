@@ -62,7 +62,8 @@ public class InfluxDBParser{
         InfluxDB influxDB = InfluxDBManager.connect();
         String dbname = InfluxDBManager.getInfluxDBConfig().getDbname();
         influxDB.setDatabase(dbname);
-        Query query = new Query("SELECT * FROM aggregateReports LIMIT 100", dbname);
+        Query query = new Query("SELECT * FROM " + InfluxDBManager.getInfluxDBConfig().getMeasurement()
+                + " LIMIT " + InfluxDBManager.getInfluxDBConfig().getLimit(), dbname);
 
         QueryResult queryResult = influxDB.query(query);
         InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();

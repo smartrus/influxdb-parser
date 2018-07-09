@@ -16,6 +16,7 @@ public class InfluxDBConfig {
     private String datadir;
     private String waldir;
     private String out;
+    private String limit;
 
     public InfluxDBConfig(String url, String user, String password, String dbname, String measurement,
                           String retention, String datadir, String waldir, String out) {
@@ -28,6 +29,7 @@ public class InfluxDBConfig {
         this.datadir = datadir;
         this.waldir = waldir;
         this.out = out;
+        this.limit = limit;
     }
 
     public String getUrl() {
@@ -62,5 +64,9 @@ public class InfluxDBConfig {
 
     public String getOut() {
         return out;
+    }
+
+    public String getLimit() {
+        return limit;
     }
 }
