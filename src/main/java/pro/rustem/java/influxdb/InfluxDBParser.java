@@ -2,8 +2,6 @@ package pro.rustem.java.influxdb;
 import pro.rustem.java.cli.CliArgs;
 import org.influxdb.*;
 import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
-import org.influxdb.impl.InfluxDBResultMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,17 +27,15 @@ public class InfluxDBParser{
         // checks list file in json format
         String chconf = cliArgs.switchValue("-chconf", "./checks.conf");
 
-        System.out.println(dbconf);
-        System.out.println(chconf);
+        System.out.println("-dbconf is set to " + dbconf);
+        System.out.println("-chconf is set to " + chconf);
 
         // initializing db connection and checking data format
         InfluxDBParser influxDBParser = new InfluxDBParser();
         InfluxDBManager.configInit(dbconf);
         InfluxDBManager.checkInit(chconf);
-        List<AggregateReport> aggregateReportList = influxDBParser.fetchAggregateReportList();
-        Boolean result = influxDBParser.checkAggregateReportFormat(aggregateReportList);
 
-        if (result) {
+        if (influxDBParser.checkDBFormat()) {
             System.out.println("Wrong format detected.");
             CmdExecutor cmdExecutor = new CmdExecutor();
             String command = "influx_inspect export -database " + InfluxDBManager.getInfluxDBConfig().getDbname()
@@ -56,46 +52,39 @@ public class InfluxDBParser{
 
     /**
      * Fetches records from the influxdb
-     * @return returns a pojo class AggregateReportList instance
+     * @return returns true if format is wrong
      */
-    private List<AggregateReport> fetchAggregateReportList() {
+    private Boolean checkDBFormat() {
+
+        System.out.println("Field is set to " + InfluxDBManager.getInfluxDBConfig().getField());
+        System.out.println("Measurement is set to " + InfluxDBManager.getInfluxDBConfig().getMeasurement());
+        System.out.println("Limit is set to " + InfluxDBManager.getInfluxDBConfig().getLimit());
+
         InfluxDB influxDB = InfluxDBManager.connect();
         String dbname = InfluxDBManager.getInfluxDBConfig().getDbname();
         influxDB.setDatabase(dbname);
-        Query query = new Query("SELECT * FROM " + InfluxDBManager.getInfluxDBConfig().getMeasurement()
+        Query query = new Query("SELECT " + InfluxDBManager.getInfluxDBConfig().getField()
+                + " FROM " + InfluxDBManager.getInfluxDBConfig().getMeasurement()
                 + " LIMIT " + InfluxDBManager.getInfluxDBConfig().getLimit(), dbname);
 
-        QueryResult queryResult = influxDB.query(query);
-        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-        List<AggregateReport> aggregateReportList = resultMapper
-                .toPOJO(queryResult, AggregateReport.class);
-
-        influxDB.close();
-        return aggregateReportList;
-    }
-
-    /**
-     * Checks the aggregateReport if it needs to be re-formatted
-     * @param aggregateReportList
-     * @return boolean value which is true if it finds any strings from checks list
-     */
-    private Boolean checkAggregateReportFormat(List<AggregateReport> aggregateReportList) {
-        Boolean result = false;
+        String queryResult = influxDB.query(query).toString();
         List<Check> checks = InfluxDBManager.getChecksWrapper().getChecks();
-        System.out.println("CheckAggregateReportFormat started.");
+        Boolean result = false;
 
-        for (AggregateReport aggregateReport:
-        aggregateReportList) {
-            for (Check check:
-                 checks) {
-                if (aggregateReport.getAggregate_report_rate() != null &&
-                        aggregateReport.getAggregate_report_rate().contains(check.getCheck())) {
-                    result = true;
-                    break;
-                }
+        for (Check check:
+                checks) {
+
+            String regexe = "([0-9]*[.])?[0-9]+" + check.getCheck();
+
+            Pattern pattern = Pattern.compile(regexe);
+            Matcher matcher = pattern.matcher(queryResult);
+            if (matcher.find()) {
+                result = true;
+                break;
             }
         }
-        System.out.println("CheckAggregateReportFormat done.");
+
+        influxDB.close();
         return result;
     }
 

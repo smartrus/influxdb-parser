@@ -11,6 +11,7 @@ public class InfluxDBConfig {
     private String user;
     private String password;
     private String dbname;
+    private String field;
     private String measurement;
     private String retention;
     private String datadir;
@@ -18,12 +19,13 @@ public class InfluxDBConfig {
     private String out;
     private String limit;
 
-    public InfluxDBConfig(String url, String user, String password, String dbname, String measurement,
-                          String retention, String datadir, String waldir, String out) {
+    public InfluxDBConfig(String url, String user, String password, String dbname, String field, String measurement,
+                          String retention, String datadir, String waldir, String out, String limit) {
         this.url = url;
         this.user = user;
         this.password = password;
         this.dbname = dbname;
+        this.field = field;
         this.measurement = measurement;
         this.retention = retention;
         this.datadir = datadir;
@@ -45,6 +47,10 @@ public class InfluxDBConfig {
     }
 
     public String getDbname() { return dbname; }
+
+    public String getField() {
+        return field;
+    }
 
     public String getMeasurement() {
         return measurement;
