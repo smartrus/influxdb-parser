@@ -55,11 +55,26 @@ public class InfluxDBParser{
             System.out.println(command);
             cmdExecutor.executeCommand(command);
 
+            // copy file
             command = "cp " + outFileName + " " + outFileName + "_fixed";
             System.out.println(command);
             cmdExecutor.executeCommand(command);
 
             influxDBParser.fixDumpFormat(outFileName + "_fixed");
+
+            // drop influxdb database
+            InfluxDB influxDB = InfluxDBManager.connect();
+            String dbname = InfluxDBManager.getInfluxDBConfig().getDbname();
+            influxDB.setDatabase(dbname);
+            Query query = new Query("DROP DATABASE " + InfluxDBManager.getInfluxDBConfig().getDbname(), dbname);
+            String queryResult = influxDB.query(query).toString();
+            System.out.println(queryResult);
+            influxDB.close();
+
+            // import fixed influxdb dump
+            command = "influx -import " + outFileName + "_fixed";
+            System.out.println(command);
+            cmdExecutor.executeCommand(command);
         } else {
             System.out.println("No wrong format detected.");
         }
