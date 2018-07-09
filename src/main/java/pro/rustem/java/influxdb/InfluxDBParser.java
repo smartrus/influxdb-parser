@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,13 +40,26 @@ public class InfluxDBParser{
         if (influxDBParser.checkDBFormat()) {
             System.out.println("Wrong format detected.");
             CmdExecutor cmdExecutor = new CmdExecutor();
+
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            String outFileName = InfluxDBManager.getInfluxDBConfig().getOut() + now.format(formatter);
+
+            System.out.println("OutFileName is set to " + outFileName);
+
             String command = "influx_inspect export -database " + InfluxDBManager.getInfluxDBConfig().getDbname()
                     + " -retention " + InfluxDBManager.getInfluxDBConfig().getRetention()
                     + " -datadir " + InfluxDBManager.getInfluxDBConfig().getDatadir()
-                    + "-waldir " + InfluxDBManager.getInfluxDBConfig().getWaldir()
-                    + " -out " + InfluxDBManager.getInfluxDBConfig().getDbname();
+                    + " -waldir " + InfluxDBManager.getInfluxDBConfig().getWaldir()
+                    + " -out " + outFileName;
+            System.out.println(command);
             cmdExecutor.executeCommand(command);
-            influxDBParser.fixDumpFormat("./jmeter");
+
+            command = "cp " + outFileName + " " + outFileName + "_fixed";
+            System.out.println(command);
+            cmdExecutor.executeCommand(command);
+
+            influxDBParser.fixDumpFormat(outFileName + "_fixed");
         } else {
             System.out.println("No wrong format detected.");
         }
