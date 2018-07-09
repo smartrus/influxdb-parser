@@ -9,8 +9,7 @@ class CheckListTest {
 
     @Test
     void getChecks() {
-        InfluxDBManager influxDBManager = new InfluxDBManager();
-        CheckList result = influxDBManager.checkInit();
-        Assertions.assertTrue(result.getChecks().get(0).getCheck().equals("KB/s"));
+        InfluxDBManager.checkInit("./checks.conf");
+        Assertions.assertTrue(InfluxDBManager.getChecksWrapper().getChecks().get(0).getCheck().equals("KB/s"));
     }
 }

@@ -6,12 +6,11 @@ class InfluxDBManagerTest {
 
     @Test
     void configInitTest() {
-        InfluxDBManager influxDBManager = new InfluxDBManager();
-        InfluxDBConfig result = influxDBManager.configInit();
-        Assertions.assertTrue(result.getUrl().equals("http://localhost:8086"));
-        Assertions.assertTrue(result.getUser().equals("root"));
-        Assertions.assertTrue(result.getPassword().equals("root"));
-        Assertions.assertTrue(result.getDbname().equals("jmeter"));
+        InfluxDBManager.configInit("./influxdb.conf");
+        Assertions.assertTrue(InfluxDBManager.getInfluxDBConfig().getUrl().equals("http://localhost:8086"));
+        Assertions.assertTrue(InfluxDBManager.getInfluxDBConfig().getUser().equals("root"));
+        Assertions.assertTrue(InfluxDBManager.getInfluxDBConfig().getPassword().equals("root"));
+        Assertions.assertTrue(InfluxDBManager.getInfluxDBConfig().getDbname().equals("jmeter"));
     }
 
     @Test

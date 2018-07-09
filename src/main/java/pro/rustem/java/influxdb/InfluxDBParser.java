@@ -1,4 +1,5 @@
 package pro.rustem.java.influxdb;
+import pro.rustem.java.cli.CliArgs;
 import org.influxdb.*;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -20,8 +21,21 @@ import java.util.regex.*;
 public class InfluxDBParser{
 
     public static void main(String[] args) {
+
+        // cli arguments parsing
+        CliArgs cliArgs = new CliArgs(args);
+        // influxdb configuration file in json format
+        String dbconf = cliArgs.switchValue("-dbconf", "./influxdb.conf");
+        // checks list file in json format
+        String chconf = cliArgs.switchValue("-chconf", "./checks.conf");
+
+        System.out.println(dbconf);
+        System.out.println(chconf);
+
+        // initializing db connection and checking data format
         InfluxDBParser influxDBParser = new InfluxDBParser();
-        InfluxDBManager influxDBManager = new InfluxDBManager();
+        InfluxDBManager.configInit(dbconf);
+        InfluxDBManager.checkInit(chconf);
         List<AggregateReport> aggregateReportList = influxDBParser.fetchAggregateReportList();
         Boolean result = influxDBParser.checkAggregateReportFormat(aggregateReportList);
 

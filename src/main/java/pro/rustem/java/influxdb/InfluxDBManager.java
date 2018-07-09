@@ -14,24 +14,19 @@ public class InfluxDBManager {
     private static InfluxDBConfig influxDBConfig;
     private static CheckList checksWrapper;
 
-    public InfluxDBManager() {
-        InfluxDBManager.influxDBConfig = this.configInit();
-        InfluxDBManager.checksWrapper = this.checkInit();
-    }
-
     public static InfluxDB connect() {
         InfluxDB influxDB = InfluxDBFactory.connect(influxDBConfig.getUrl(), influxDBConfig.getUser(),
                 influxDBConfig.getPassword());
         return influxDB;
     }
 
-    protected InfluxDBConfig configInit() {
+    public static void configInit(String dbconf) {
 
         Gson gson = new Gson();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader("influxdb.conf"));
-            influxDBConfig = gson.fromJson(br, InfluxDBConfig.class);
+            br = new BufferedReader(new FileReader(dbconf));
+            InfluxDBManager.influxDBConfig = gson.fromJson(br, InfluxDBConfig.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -43,17 +38,15 @@ public class InfluxDBManager {
                 }
             }
         }
-
-        return influxDBConfig;
     }
 
-    protected CheckList checkInit() {
+    public static void checkInit(String chconf) {
         CheckList checks = new CheckList();
         Gson gson = new Gson();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader("checks.conf"));
-            checks = gson.fromJson(br, CheckList.class);
+            br = new BufferedReader(new FileReader(chconf));
+            InfluxDBManager.checksWrapper = gson.fromJson(br, CheckList.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -65,8 +58,6 @@ public class InfluxDBManager {
                 }
             }
         }
-
-        return checks;
     }
 
     public static InfluxDBConfig getInfluxDBConfig() {
