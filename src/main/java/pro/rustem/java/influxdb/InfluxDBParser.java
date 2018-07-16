@@ -72,7 +72,7 @@ public class InfluxDBParser{
             influxDB.close();
 
             // import fixed influxdb dump
-            command = "influx -import " + outFileName + "_fixed";
+            command = "influx -import -path=" + outFileName + "_fixed";
             System.out.println(command);
             cmdExecutor.executeCommand(command);
         } else {
